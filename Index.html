@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>KENO VERSE | Anime Universe Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --neon-purple: #bf00ff;
+    --neon-purple2: #9d00ff;
+    --neon-pink: #ff00cc;
+    --neon-cyan: #00f0ff;
+    --dark: #050008;
+    --dark2: #0a000f;
+    --dark3: #110018;
+    --card-bg: rgba(25, 0, 40, 0.85);
+    --text: #f0e6ff;
+    --text-muted: #a07ec0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 16px; height: 16px;
+    border: 2px solid var(--neon-purple);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s, border-color 0.2s;
+    box-shadow: 0 0 10px var(--neon-purple);
+  }
+  .cursor-dot {
+    width: 4px; height: 4px;
+    background: var(--neon-pink);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    box-shadow: 0 0 8px var(--neon-pink);
+  }
+
+  /* PARTICLES BG */
+  #particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* SCANLINES OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.05) 2px,
+      rgba(0,0,0,0.05) 4px
+    );
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* NAVBAR */
+  nav {
+    position: fixed;
+    top: 0; width: 100%;
+    z-index: 100;
+    padding: 18px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(5, 0, 8, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(191, 0, 255, 0.3);
+  }
+
+  .logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.8rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink), var(--neon-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+    letter-spacing: 4px;
+    animation: logoGlow 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px rgba(191,0,255,0.8));
+  }
+
+  @keyframes logoGlow {
+    0%, 100% { filter: drop-shadow(0 0 10px rgba(191,0,255,0.6)); }
+    50% { filter: drop-shadow(0 0 25px rgba(255,0,204,0.9)); }
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--neon-purple);
+    box-shadow: 0 0 8px var(--neon-purple);
+    transition: width 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--neon-purple); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-contact a {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    color: var(--neon-cyan);
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: text-shadow 0.2s;
+    font-weight: 600;
+  }
+  .nav-contact a:hover {
+    text-shadow: 0 0 8px var(--neon-cyan);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 20px 60px;
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  .hero-bg-circles {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .hero-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    transform: translate(-50%, -50%);
+    animation: rotateSlow linear infinite;
+  }
+
+  .hero-circle:nth-child(1) {
+    width: 500px; height: 500px;
+    border-color: rgba(191,0,255,0.15);
+    animation-duration: 20s;
+  }
+  .hero-circle:nth-child(2) {
+    width: 700px; height: 700px;
+    border-color: rgba(255,0,204,0.1);
+    animation-duration: 30s;
+    animation-direction: reverse;
+  }
+  .hero-circle:nth-child(3) {
+    width: 900px; height: 900px;
+    border-color: rgba(0,240,255,0.07);
+    animation-duration: 45s;
+  }
+
+  @keyframes rotateSlow {
+    from { transform: translate(-50%,-50%) rotate(0deg); }
+    to { transform: translate(-50%,-50%) rotate(360deg); }
+  }
+
+  .hero-tag {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 6px;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(3rem, 10vw, 8rem);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.9s ease 0.1s both;
+  }
+
+  .hero-title span.neon-line {
+    display: block;
+    background: linear-gradient(135deg, #ffffff 0%, var(--neon-purple) 50%, var(--neon-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 30px rgba(191,0,255,0.6));
+  }
+
+  .hero-title span.glitch {
+    display: block;
+    color: var(--neon-cyan);
+    font-size: 0.45em;
+    letter-spacing: 12px;
+    -webkit-text-fill-color: var(--neon-cyan);
+    text-shadow: 0 0 20px var(--neon-cyan);
+    animation: glitch 4s ease-in-out infinite;
+  }
+
+  @keyframes glitch {
+    0%, 90%, 100% { transform: none; opacity: 1; }
+    92% { transform: skewX(15deg); opacity: 0.8; }
+    94% { transform: skewX(-10deg); }
+    96% { transform: skewX(5deg); }
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 500px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeUp 1s ease 0.3s both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .btn-primary {
+    padding: 14px 36px;
+    background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+    border: none;
+    border-radius: 2px;
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: none;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(191,0,255,0.4);
+    transition: all 0.3s;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-primary:hover { box-shadow: 0 0 50px rgba(191,0,255,0.7); transform: translateY(-2px); }
+  .btn-primary:hover::before { left: 100%; }
+
+  .btn-outline {
+    padding: 14px 36px;
+    background: transparent;
+    border: 1px solid var(--neon-cyan);
+    border-radius: 2px;
+    color: var(--neon-cyan);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: none;
+    text-decoration: none;
+    transition: all 0.3s;
+    box-shadow: 0 0 15px rgba(0,240,255,0.2), inset 0 0 15px rgba(0,240,255,0.05);
+  }
+
+  .btn-outline:hover {
+    background: rgba(0,240,255,0.1);
+    box-shadow: 0 0 30px rgba(0,240,255,0.5);
+    transform: translateY(-2px);
+  }
+
+  /* SECTION COMMON */
+  section {
+    position: relative;
+    z-index: 2;
+    padding: 80px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .section-label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 6px;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff, var(--neon-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(191,0,255,0.4));
+    letter-spacing: 2px;
+  }
+
+  .divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink));
+    margin: 16px auto 0;
+    box-shadow: 0 0 10px var(--neon-purple);
+  }
+
+  /* SEPARATOR LINE */
+  .sep {
+    position: relative;
+    z-index: 2;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(191,0,255,0.4), rgba(0,240,255,0.4), transparent);
+    margin: 0 40px;
+  }
+
+  /* CATEGORIES */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .cat-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(191,0,255,0.25);
+    border-radius: 4px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .cat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(191,0,255,0.05), rgba(255,0,204,0.05));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .cat-card:hover {
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 30px rgba(191,0,255,0.3), inset 0 0 30px rgba(191,0,255,0.05);
+    transform: translateY(-5px);
+  }
+
+  .cat-card:hover::before { opacity: 1; }
+
+  .cat-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(191,0,255,0.6));
+  }
+
+  .cat-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  /* TOPUP SECTION */
+  .game-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .tab-btn {
+    padding: 10px 22px;
+    background: transparent;
+    border: 1px solid rgba(191,0,255,0.3);
+    border-radius: 2px;
+    color: var(--text-muted);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: none;
+    transition: all 0.3s;
+  }
+
+  .tab-btn.active, .tab-btn:hover {
+    border-color: var(--neon-purple);
+    color: var(--neon-purple);
+    background: rgba(191,0,255,0.1);
+    box-shadow: 0 0 15px rgba(191,0,255,0.2);
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+
+  .price-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(191,0,255,0.2);
+    border-radius: 4px;
+    padding: 18px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .price-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--neon-purple), var(--neon-pink));
+    box-shadow: 0 0 10px var(--neon-purple);
+  }
+
+  .price-card:hover {
+    border-color: rgba(191,0,255,0.5);
+    box-shadow: 0 0 25px rgba(191,0,255,0.2);
+    transform: translateX(4px);
+  }
+
+  .price-amount {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    margin-bottom: 6px;
+  }
+
+  .price-idr {
+    font-size: 0.85rem;
+    color: var(--neon-pink);
+    font-weight: 600;
+  }
+
+  .price-badge {
+    position: absolute;
+    top: 8px; right: 8px;
+    font-size: 0.6rem;
+    background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-family: 'Orbitron', monospace;
+    letter-spacing: 1px;
+  }
+
+  /* CLOTHES */
+  .clothes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+  }
+
+  .clothes-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(191,0,255,0.25);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .clothes-card:hover {
+    border-color: var(--neon-pink);
+    box-shadow: 0 0 40px rgba(255,0,204,0.2);
+    transform: translateY(-6px);
+  }
+
+  .clothes-img {
+    height: 200px;
+    background: linear-gradient(135deg, rgba(191,0,255,0.15), rgba(255,0,204,0.1));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .clothes-img::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(191,0,255,0.2), transparent 70%);
+  }
+
+  .clothes-body { padding: 20px; }
+
+  .clothes-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .clothes-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--neon-purple);
+    text-shadow: 0 0 10px rgba(191,0,255,0.5);
+  }
+
+  .clothes-tag {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--neon-cyan);
+    border: 1px solid rgba(0,240,255,0.3);
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  /* GAME ACCOUNTS */
+  .account-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .account-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(191,0,255,0.25);
+    border-radius: 4px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .account-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -50%;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(191,0,255,0.1), transparent 70%);
+    pointer-events: none;
+  }
+
+  .account-card:hover {
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 40px rgba(191,0,255,0.25);
+    transform: translateY(-5px);
+  }
+
+  .account-game {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .account-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .account-price {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.3rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .account-badge {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: linear-gradient(135deg, rgba(191,0,255,0.3), rgba(255,0,204,0.3));
+    border: 1px solid rgba(191,0,255,0.4);
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-size: 0.65rem;
+    font-family: 'Orbitron', monospace;
+    letter-spacing: 1px;
+    color: var(--neon-purple);
+  }
+
+  /* IPHONE SECTION */
+  .iphone-section { max-width: 1200px; }
+
+  .iphone-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .iphone-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0,240,255,0.2);
+    border-radius: 4px;
+    padding: 24px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .iphone-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+    box-shadow: 0 0 10px var(--neon-cyan);
+  }
+
+  .iphone-card:hover {
+    border-color: rgba(0,240,255,0.5);
+    box-shadow: 0 0 30px rgba(0,240,255,0.15);
+    transform: translateY(-5px);
+  }
+
+  .iphone-model {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .iphone-model::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 24px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2300f0ff'%3E%3Cpath d='M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
+
+  .storage-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(191,0,255,0.1);
+  }
+
+  .storage-item:last-child { border-bottom: none; }
+
+  .storage-size {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .storage-price {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  .iphone-series-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--neon-pink);
+    text-transform: uppercase;
+    text-align: center;
+    margin: 40px 0 20px;
+    position: relative;
+  }
+
+  .iphone-series-label::before,
+  .iphone-series-label::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,0,204,0.5));
+  }
+
+  .iphone-series-label::before { right: 55%; }
+  .iphone-series-label::after { left: 55%; background: linear-gradient(90deg, rgba(255,0,204,0.5), transparent); }
+
+  /* CONTACT / ORDER */
+  .order-section {
+    background: var(--dark2);
+    border-top: 1px solid rgba(191,0,255,0.2);
+    border-bottom: 1px solid rgba(191,0,255,0.2);
+    padding: 80px 40px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .order-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(191,0,255,0.05), transparent 70%);
+  }
+
+  .contact-info {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .contact-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(191,0,255,0.3);
+    border-radius: 4px;
+    padding: 24px 36px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .contact-card:hover {
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 25px rgba(191,0,255,0.3);
+  }
+
+  .contact-label {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .contact-value {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--neon-purple);
+    text-shadow: 0 0 15px rgba(191,0,255,0.4);
+  }
+
+  .contact-value a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .contact-value a:hover {
+    text-decoration: underline;
+  }
+
+  .wa-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    padding: 16px 40px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    border-radius: 2px;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    box-shadow: 0 0 30px rgba(37,211,102,0.3);
+    transition: all 0.3s;
+  }
+
+  .wa-btn:hover {
+    box-shadow: 0 0 50px rgba(37,211,102,0.5);
+    transform: translateY(-3px);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark2);
+    border-top: 1px solid rgba(191,0,255,0.15);
+    padding: 30px 40px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .footer-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.4rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--neon-purple), var(--neon-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+  }
+
+  .footer-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+
+  /* ANIME PARTICLES FLOATING */
+  .anime-particle {
+    position: fixed;
+    font-size: 1.2rem;
+    opacity: 0.3;
+    animation: floatParticle linear infinite;
+    pointer-events: none;
+    z-index: 1;
+    filter: drop-shadow(0 0 6px var(--neon-purple));
+  }
+
+  @keyframes floatParticle {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+  }
+
+  /* NEON BORDER ANIMATION */
+  .neon-border {
+    position: relative;
+  }
+
+  .neon-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink), var(--neon-cyan), var(--neon-purple));
+    background-size: 300% 100%;
+    border-radius: 4px;
+    z-index: -1;
+    animation: borderFlow 4s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .neon-border:hover::before { opacity: 1; }
+
+  @keyframes borderFlow {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 300% 0%; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    section { padding: 60px 20px; }
+    .hero { padding: 100px 20px 60px; }
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeUp 1s ease 0.5s both;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(180deg, transparent, var(--neon-purple));
+    animation: scrollAnim 2s ease-in-out infinite;
+  }
+
+  .scroll-text {
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-family: 'Rajdhani', sans-serif;
+  }
+
+  @keyframes scrollAnim {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<div class="anime-particle" style="left:5%;animation-duration:12s;animation-delay:0s;">⚡</div>
+<div class="anime-particle" style="left:15%;animation-duration:18s;animation-delay:3s;">✨</div>
+<div class="anime-particle" style="left:25%;animation-duration:14s;animation-delay:6s;">🌸</div>
+<div class="anime-particle" style="left:40%;animation-duration:20s;animation-delay:1s;">⭐</div>
+<div class="anime-particle" style="left:55%;animation-duration:16s;animation-delay:8s;">💫</div>
+<div class="anime-particle" style="left:70%;animation-duration:13s;animation-delay:4s;">🔥</div>
+<div class="anime-particle" style="left:80%;animation-duration:19s;animation-delay:2s;">⚡</div>
+<div class="anime-particle" style="left:90%;animation-duration:15s;animation-delay:7s;">✨</div>
+
+<canvas id="particles"></canvas>
+
+<nav>
+  <div class="logo">KENO VERSE</div>
+  <ul class="nav-links">
+    <li><a href="#topup">Top Up</a></li>
+    <li><a href="#pakaian">Pakaian</a></li>
+    <li><a href="#akun">Akun Game</a></li>
+    <li><a href="#iphone">iPhone</a></li>
+    <li><a href="#order">Order</a></li>
+  </ul>
+  <div class="nav-contact"><a href="https://wa.me/6282121544150" target="_blank" rel="noopener noreferrer">📱 6282121544150</a></div>
+</nav>
+
+<!-- HERO SECTION -->
+<div class="hero">
+  <div class="hero-bg-circles">
+    <div class="hero-circle"></div>
+    <div class="hero-circle"></div>
+    <div class="hero-circle"></div>
+  </div>
+  <div style="position:relative;z-index:3;">
+    <span class="hero-tag">ケノ バース — Anime Universe Store</span>
+    <h1 class="hero-title">
+      <span class="neon-line">KENO</span>
+      <span class="neon-line">VERSE</span>
+      <span class="glitch">ANIME STORE</span>
+    </h1>
+    <p class="hero-desc">Top Up Game • Jual Akun • Pakaian Anime • iPhone<br>Semua kebutuhan digitalmu ada di sini.</p>
+    <div class="hero-btns">
+      <a href="#topup" class="btn-primary">Top Up Sekarang</a>
+      <a href="https://wa.me/6282121544150" target="_blank" rel="noopener noreferrer" class="btn-outline">Hubungi Admin</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span class="scroll-text">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section>
+  <div class="section-header">
+    <span class="section-label">カテゴリー — Kategori</span>
+    <h2 class="section-title">APA YANG KAMU CARI?</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="categories-grid">
+    <a href="#topup" class="cat-card neon-border">
+      <span class="cat-icon">⚡</span>
+      <div class="cat-name">Top Up Game</div>
+    </a>
+    <a href="#pakaian" class="cat-card neon-border">
+      <span class="cat-icon">👕</span>
+      <div class="cat-name">Pakaian Anime</div>
+    </a>
+    <a href="#akun" class="cat-card neon-border">
+      <span class="cat-icon">🎮</span>
+      <div class="cat-name">Jual Akun</div>
+    </a>
+    <a href="#iphone" class="cat-card neon-border">
+      <span class="cat-icon">📱</span>
+      <div class="cat-name">iPhone</div>
+    </a>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- TOP UP SECTION (ringkas) -->
+<section id="topup">
+  <div class="section-header">
+    <span class="section-label">トップアップ — Top Up</span>
+    <h2 class="section-title">TOP UP GAME</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="game-tabs">
+    <button class="tab-btn active" onclick="switchTab('ff')">Free Fire</button>
+    <button class="tab-btn" onclick="switchTab('ml')">Mobile Legends</button>
+    <button class="tab-btn" onclick="switchTab('pubg')">PUBG Mobile</button>
+    <button class="tab-btn" onclick="switchTab('cod')">Call of Duty</button>
+  </div>
+  <div class="tab-content active" id="tab-ff">
+    <div class="price-card"><div class="price-amount">5 Diamonds 💎</div><div class="price-idr">Rp 1.000</div></div>
+    <div class="price-card"><div class="price-amount">12 Diamonds 💎</div><div class="price-idr">Rp 2.000</div></div>
+    <div class="price-card"><div class="price-badge">POPULAR</div><div class="price-amount">720 Diamonds 💎</div><div class="price-idr">Rp 100.000</div></div>
+    <div class="price-card"><div class="price-amount">73.100 Diamonds 💎</div><div class="price-idr">Rp 10.000.000</div></div>
+  </div>
+  <div class="tab-content" id="tab-ml">
+    <div class="price-card"><div class="price-amount">154+16 Diamonds 💎</div><div class="price-idr">Rp 43.700</div></div>
+    <div class="price-card"><div class="price-amount">4003+827 Diamonds 💎</div><div class="price-idr">Rp 1.140.000</div></div>
+  </div>
+  <div class="tab-content" id="tab-pubg">
+    <div class="price-card"><div class="price-amount">660 UC 🪙</div><div class="price-idr">Rp 159.100</div></div>
+    <div class="price-card"><div class="price-amount">40500 UC 🪙</div><div class="price-idr">Rp 7.900.000</div></div>
+  </div>
+  <div class="tab-content" id="tab-cod">
+    <div class="price-card"><div class="price-amount">645 CP 🎯</div><div class="price-idr">Rp 100.000</div></div>
+    <div class="price-card"><div class="price-amount">76560 CP 🎯</div><div class="price-idr">Rp 10.000.000</div></div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- PAKAIAN ANIME -->
+<section id="pakaian">
+  <div class="section-header">
+    <span class="section-label">アニメ服 — Pakaian</span>
+    <h2 class="section-title">PAKAIAN ANIME</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="clothes-grid">
+    <div class="clothes-card neon-border"><div class="clothes-img">👕</div><div class="clothes-body"><div class="clothes-name">Baju Casual Anime Ungu</div><div class="clothes-price">Rp 145.000</div><span class="clothes-tag">Casual • Anime Style</span></div></div>
+    <div class="clothes-card neon-border"><div class="clothes-img">👔</div><div class="clothes-body"><div class="clothes-name">Kemeja Anime Ungu</div><div class="clothes-price">Rp 195.000</div><span class="clothes-tag">Kemeja • Anime Style</span></div></div>
+    <div class="clothes-card neon-border"><div class="clothes-img">👖</div><div class="clothes-body"><div class="clothes-name">Celana Panjang Anime Ungu</div><div class="clothes-price">Rp 235.000</div><span class="clothes-tag">Celana • Anime Style</span></div></div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- AKUN GAME -->
+<section id="akun">
+  <div class="section-header">
+    <span class="section-label">ゲームアカウント — Akun</span>
+    <h2 class="section-title">JUAL AKUN GAME</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="account-grid">
+    <div class="account-card neon-border"><span class="account-badge">RARE ⭐</span><div class="account-game">Mobile Legends</div><div class="account-name">Akun Kolektor Juragan III<br><small style="color:var(--text-muted);font-size:0.85rem;">Premium Account</small></div><div class="account-price">Rp 3.500.000</div></div>
+    <div class="account-card neon-border"><span class="account-badge">HOT 🔥</span><div class="account-game">Free Fire</div><div class="account-name">Akun Free Fire<br><small style="color:var(--text-muted);font-size:0.85rem;">Berbagai Tier</small></div><div class="account-price">Rp 500.000 – 4.700.000</div></div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- IPHONE SECTION (ringkas) -->
+<section id="iphone" class="iphone-section">
+  <div class="section-header">
+    <span class="section-label">アイフォン — iPhone</span>
+    <h2 class="section-title">JUAL iPHONE</h2>
+    <div class="divider"></div>
+  </div>
+  <div class="iphone-series-label">Seri Terbaru — Flagship</div>
+  <div class="iphone-grid">
+    <div class="iphone-card"><div class="iphone-model">iPhone 16 Pro Max</div><div class="storage-item"><span class="storage-size">256 GB</span><span class="storage-price">Rp 20.499.000</span></div><div class="storage-item"><span class="storage-size">512 GB</span><span class="storage-price">Rp 23.999.000</span></div></div>
+    <div class="iphone-card" style="border-color:rgba(255,0,204,0.4);box-shadow:0 0 30px rgba(255,0,204,0.1);"><div class="iphone-model" style="color:var(--neon-pink);">iPhone 17 Pro Max</div><div class="storage-item"><span class="storage-size">256 GB</span><span class="storage-price" style="color:var(--neon-pink);">Rp 26.499.000</span></div><div class="storage-item"><span class="storage-size">1 TB</span><span class="storage-price" style="color:var(--neon-pink);">Rp 35.749.000</span></div></div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ORDER SECTION dengan WhatsApp link di semua kontak -->
+<div class="order-section" id="order">
+  <span class="section-label">注文する — Order</span>
+  <h2 class="section-title" style="font-family:'Orbitron',monospace;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;background:linear-gradient(135deg,#fff,var(--neon-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">CARA ORDER</h2>
+  <div class="divider"></div>
+  <p style="margin-top:24px;color:var(--text-muted);font-size:1rem;line-height:1.9;max-width:500px;margin-left:auto;margin-right:auto;">
+    Hubungi admin kami via WhatsApp.<br>
+    Sebutkan produk yang diinginkan & ID Game kamu.<br>
+    Proses cepat, aman, dan terpercaya! ⚡
+  </p>
+
+  <div class="contact-info">
+    <div class="contact-card">
+      <span class="contact-label">WhatsApp Admin</span>
+      <div class="contact-value"><a href="https://wa.me/6282121544150" target="_blank" rel="noopener noreferrer">+62 821-2154-4150</a></div>
+    </div>
+    <div class="contact-card">
+      <span class="contact-label">Email</span>
+      <div class="contact-value" style="font-size:0.85rem;">raflyeditz1@gmail.com</div>
+    </div>
+  </div>
+
+  <div>
+    <a href="https://wa.me/6282121544150" target="_blank" rel="noopener noreferrer" class="wa-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chat WhatsApp Sekarang
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">KENO VERSE</div>
+  <p class="footer-text">© 2025 KENO VERSE — Anime Universe Store | All Rights Reserved</p>
+  <p style="font-size:0.75rem;color:rgba(160,126,192,0.5);margin-top:6px;letter-spacing:2px;">ケノ バース • TOP UP • AKUN GAME • PAKAIAN ANIME • iPHONE</p>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const cursorDot = document.getElementById('cursorDot');
+  document.addEventListener('mousemove', e => {
+    cursorDot.style.left = e.clientX - 2 + 'px';
+    cursorDot.style.top = e.clientY - 2 + 'px';
+    cursor.style.left = e.clientX - 8 + 'px';
+    cursor.style.top = e.clientY - 8 + 'px';
+  });
+  document.querySelectorAll('a, button, .cat-card, .price-card, .clothes-card, .account-card, .iphone-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2)'; cursor.style.borderColor = 'var(--neon-pink)'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; cursor.style.borderColor = 'var(--neon-purple)'; });
+  });
+
+  function switchTab(game) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + game).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+  const particles = [];
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.5 + 0.5,
+      dx: (Math.random() - 0.5) * 0.4, dy: (Math.random() - 0.5) * 0.4,
+      opacity: Math.random() * 0.5 + 0.1, color: Math.random() > 0.5 ? '#bf00ff' : '#ff00cc'
+    });
+  }
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.dx; p.y += p.dy;
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color; ctx.globalAlpha = p.opacity; ctx.shadowBlur = 10; ctx.shadowColor = p.color; ctx.fill();
+    });
+    particles.forEach((p1, i) => {
+      particles.slice(i + 1).forEach(p2 => {
+        const d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+        if (d < 120) {
+          ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = '#bf00ff'; ctx.globalAlpha = (1 - d / 120) * 0.15; ctx.lineWidth = 0.5; ctx.stroke();
+        }
+      });
+    });
+    ctx.globalAlpha = 1; requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const hash = a.getAttribute('href');
+      if (hash === '#') return;
+      const target = document.querySelector(hash);
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>
